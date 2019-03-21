@@ -8,15 +8,15 @@
 public class Eval implements Visitor
 {
     private int value;
-    
+
     public Eval(){
         this.value = 0;
     }
-    
+
     public int getValue(){
         return this.value;
     }
-    
+
     public void visit(Add a){
         a.getLeft().accept(this);
         int leftValue = this.value;
@@ -52,14 +52,73 @@ public class Eval implements Visitor
     public void visit(Int a){
         this.value = a.getInt();
     }
-    
+
     public void visit(Negative a){
         a.getExp().accept(this);
         int v = this.value;
         this.value = -v;
     }
-    
+
     public void visit(Positive a){
         a.getExp().accept(this);
+    }
+
+    public void visit(GreaterOrEqual a){
+        a.getLeft().accept(this);
+        int leftValue = this.value;
+        a.getRight().accept(this);
+        int rightValue = this.value;
+        if(leftValue >= rightValue) this.value = 1;
+        else this.value = 0;
+
+    }
+
+    public void visit(GreaterThan a){
+        a.getLeft().accept(this);
+        int leftValue = this.value;
+        a.getRight().accept(this);
+        int rightValue = this.value;
+        if(leftValue > rightValue) this.value = 1;
+        else this.value = 0;
+
+    }
+
+    public void visit(LessThan a){a.getLeft().accept(this);
+        int leftValue = this.value;
+        a.getRight().accept(this);
+        int rightValue = this.value;
+        if(leftValue < rightValue) this.value = 1;
+        else this.value = 0;
+
+    }
+
+    public void visit(LessOrEqual a){
+        a.getLeft().accept(this);
+        int leftValue = this.value;
+        a.getRight().accept(this);
+        int rightValue = this.value;
+        if(leftValue <= rightValue) this.value = 1;
+        else this.value = 0;
+
+    }
+
+    public void visit(Different a){
+        a.getLeft().accept(this);
+        int leftValue = this.value;
+        a.getRight().accept(this);
+        int rightValue = this.value;
+        if(leftValue != rightValue) this.value = 1;
+        else this.value = 0;
+
+    }
+
+    public void visit(Equals a){
+        a.getLeft().accept(this);
+        int leftValue = this.value;
+        a.getRight().accept(this);
+        int rightValue = this.value;
+        if(leftValue == rightValue) this.value = 1;
+        else this.value = 0;
+
     }
 } // Eval

@@ -52,16 +52,64 @@ public class PrettyPrinter implements Visitor
     public void visit(Int a){
         this.returnS +=("INT(" + a.getInt()+")");
     }
-    
+
     public void visit(Negative a){
         this.returnS += ("NEGATIVE(");
         a.getExp().accept(this);
         this.returnS += (")");
     }
-    
+
     public void visit(Positive a){
         this.returnS += ("POSITIVE(");
         a.getExp().accept(this);
         this.returnS += (")");
+    }
+
+    public void visit(GreaterOrEqual a){
+        this.returnS +=("GreaterOrEqual(");
+        a.getLeft().accept(this);
+        this.returnS +=(",");
+        a.getRight().accept(this);
+        this.returnS +=(")");
+    }
+
+    public void visit(GreaterThan a){
+        this.returnS +=("GreaterThan(");
+        a.getLeft().accept(this);
+        this.returnS +=(",");
+        a.getRight().accept(this);
+        this.returnS +=(")");
+    }
+
+    public void visit(LessThan a){
+        this.returnS +=("LessThan(");
+        a.getLeft().accept(this);
+        this.returnS +=(",");
+        a.getRight().accept(this);
+        this.returnS +=(")");
+    }
+
+    public void visit(LessOrEqual a){
+        this.returnS +=("LessOrEqual(");
+        a.getLeft().accept(this);
+        this.returnS +=(",");
+        a.getRight().accept(this);
+        this.returnS +=(")");
+    }
+
+    public void visit(Different a){
+        this.returnS +=("Different(");
+        a.getLeft().accept(this);
+        this.returnS +=(",");
+        a.getRight().accept(this);
+        this.returnS +=(")");
+    }
+
+    public void visit(Equals a){
+        this.returnS +=("Equals(");
+        a.getLeft().accept(this);
+        this.returnS +=(",");
+        a.getRight().accept(this);
+        this.returnS +=(")");
     }
 } // PrettyPrinter
