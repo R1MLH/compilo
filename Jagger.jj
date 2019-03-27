@@ -22,6 +22,8 @@ TOKEN:
     < NUMBER: (<DIGIT>)+ ("." (<DIGIT>)*)? >  // A decimal number.
 |   < DIGIT: ["0"-"9"] >                      // A decimal digit.
 |   < EOL: "\n" >                           // End of line.
+|   < LETTER: ["a" - "z"] >
+|   < STRING: "\"" (<LETTER>)* "\"">
 }
 
 // Main lopp: read expressions on a line until end of file.
@@ -42,7 +44,7 @@ void mainloop():
 // Expression (the axiom).
 // E -> T ('+'T | '-'T)*
 Exp expression():
-{ Exp a,b; }
+{ Exp a; }
 {
     a=expressionOne() { return a; }
 }
@@ -98,9 +100,20 @@ Exp expressionFive():
 }
 // Factor of an expression.
 // F -> <NUMBER> | "(" E ")"
+
 Exp expressionSix():
+{ Exp a; Exp b,c,d; }
+{
+      a=expressionSeven() {return a;}
+      | "if" "(" b = expression() ")" "then""(" c = expression() ")" "else" "(" d = expression() ")"  {return new IfThenElse(b,c,d);}
+}
+
+
+Exp expressionSeven():
 { Token t; Exp e; }
 {
-      t=<NUMBER> { return new Int(Integer.parseInt(t.toString())); }
+    t=<STRING> { return new Strexp(t.toString());}
+    |  t=<NUMBER> { return new Int(Integer.parseInt(t.toString())); }
     | "(" e=expression() ")" { return e; }
+
 }

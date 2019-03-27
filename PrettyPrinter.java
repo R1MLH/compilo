@@ -104,12 +104,26 @@ public class PrettyPrinter implements Visitor
         a.getRight().accept(this);
         this.returnS +=(")");
     }
-
+    
+    public void visit(IfThenElse a){
+        this.returnS += ("IF(");
+        a.getCondition().accept(this);
+        this.returnS += (") THEN ( ");
+        a.getThen().accept(this);
+        this.returnS += (") ELSE (");
+        a.getElse().accept(this);
+        this.returnS += ")";
+    }    
+    
     public void visit(Equals a){
         this.returnS +=("Equals(");
         a.getLeft().accept(this);
         this.returnS +=(",");
         a.getRight().accept(this);
         this.returnS +=(")");
+    }
+    
+    public void visit(Strexp e){
+        
     }
 } // PrettyPrinter

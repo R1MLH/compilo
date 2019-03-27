@@ -20,12 +20,12 @@ public interface Visitor
     public void visit(Int a);
     public void visit(Negative a);
     public void visit(Positive a);
-    
+    public void visit(IfThenElse a);
     public void visit(GreaterOrEqual a);
     public void visit(LessThan a);
     public void visit(GreaterThan a);
     public void visit(LessOrEqual a);
-    
+    public void visit(Strexp a);
     public void visit(Equals a);
     public void visit(Different a);
 } // Visitor

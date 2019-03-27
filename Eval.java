@@ -8,7 +8,8 @@
 public class Eval implements Visitor
 {
     private int value;
-
+    private String strValue;
+    
     public Eval(){
         this.value = 0;
     }
@@ -40,6 +41,14 @@ public class Eval implements Visitor
         int rightValue = this.value;
         this.value = leftValue * rightValue;
     }
+    
+     public void visit(IfThenElse a){
+        a.getCondition().accept(this);
+        int condValue = this.value;
+        if (condValue == 1)  a.getThen().accept(this);
+        else a.getElse().accept(this);
+    }
+    
 
     public void visit(Div a){
         a.getLeft().accept(this);
@@ -120,5 +129,9 @@ public class Eval implements Visitor
         if(leftValue == rightValue) this.value = 1;
         else this.value = 0;
 
+    }
+    
+    public void visit(Strexp a){
+        this.strValue = a.getString();
     }
 } // Eval
