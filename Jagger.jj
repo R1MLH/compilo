@@ -22,8 +22,8 @@ TOKEN:
     < NUMBER: (<DIGIT>)+ ("." (<DIGIT>)*)? >  // A decimal number.
 |   < DIGIT: ["0"-"9"] >                      // A decimal digit.
 |   < EOL: "\n" >                           // End of line.
-//|   < LETTER: ["a"-"z","A"-"Z"] ( (" ")* ["a"-"z","A"-"Z","0"-"9"] )* >
-|   < STRING: "\"" (~["\""])* "\"">
+|   < STRING: "\"" (~["\""])*  "\"">
+|   < VARNAME: (["a"-"z"]|["A"-"Z"])+ >
 }
 
 // Main lopp: read expressions on a line until end of file.
@@ -33,16 +33,44 @@ void mainloop():
 {
     (
       a=expression() <EOL> { a.prettyPrint(); }
-      | "print(" a=expression() ")" <EOL> { Eval e = new Eval();
+      | "print(" a=expression() ")" <EOL> {
                                             TypeChecker t = new TypeChecker();
                                             a.accept(t);
+                                            Eval e = new Eval(a.getType());
                                             a.accept(e);
-                                            System.out.println(""+e.getValue());}
+                                            switch (a.getType()){
+                                              case INT:
+                                                System.out.println(""+e.getValue());
+                                                break;
+                                              case STR:
+                                                System.out.println(e.getString());
+                                                break;
+                                            }
+                                          }
     )*
     <EOF>
 }
 
+Declaration decl():
+{Exp a; Token t;}
+{
+  "var" t=<VARNAME> ":=" a=expression() {return new Declaration(t.toString(),a);}
+}
+Instruction let():
+{Declaration a;Instruction b;}
+{
+  {LetInEnd zzz = new LetInEnd();}
+  "let" (a = decl(){zzz.addDecl(a);})* "in" (b=instruction(){zzz.addInstr(b);})* "end" {return zzz;}
 
+}
+
+Instruction instruction():
+{Exp e;Token t; Instruction i; }
+{
+  e = expression() {return new InstrExp(e);}
+  |"print""(" e = expression()")"{return new Print(e);}
+  |i =let() {return i;}
+}
 // Expression (the axiom).
 // E -> T ('+'T | '-'T)*
 Exp expression():
@@ -114,7 +142,7 @@ Exp expressionSix():
 Exp expressionSeven():
 { Token t; Exp e; }
 {
-    t=<STRING> { return new Strexp(t.toString());}
+    t=<STRING> { return new Strexp(t.toString().replaceAll("\"",""));}
     |  t=<NUMBER> { return new Int(Integer.parseInt(t.toString())); }
     | "(" e=expression() ")" { return e; }
 

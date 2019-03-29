@@ -19,11 +19,13 @@ public class Sub extends Exp
         this.left = p_left;
         this.right = p_right;
         super.setType(Type.INT);
+        //if(p_right instanceof Sub) this.right = new Add((Sub)p_right);
     } // Sub()
     
     public void accept(Visitor v){
         v.visit(this);
     }
+    
     
     
     public Exp getLeft(){return this.left;}
