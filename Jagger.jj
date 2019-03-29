@@ -22,8 +22,8 @@ TOKEN:
     < NUMBER: (<DIGIT>)+ ("." (<DIGIT>)*)? >  // A decimal number.
 |   < DIGIT: ["0"-"9"] >                      // A decimal digit.
 |   < EOL: "\n" >                           // End of line.
-|   < LETTER: ["a" - "z"] >
-|   < STRING: "\"" (<LETTER>)* "\"">
+//|   < LETTER: ["a"-"z","A"-"Z"] ( (" ")* ["a"-"z","A"-"Z","0"-"9"] )* >
+|   < STRING: "\"" (~["\""])* "\"">
 }
 
 // Main lopp: read expressions on a line until end of file.
@@ -34,6 +34,8 @@ void mainloop():
     (
       a=expression() <EOL> { a.prettyPrint(); }
       | "print(" a=expression() ")" <EOL> { Eval e = new Eval();
+                                            TypeChecker t = new TypeChecker();
+                                            a.accept(t);
                                             a.accept(e);
                                             System.out.println(""+e.getValue());}
     )*
