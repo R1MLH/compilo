@@ -19,6 +19,8 @@ public class LessOrEqual extends Exp
         // initialise instance variables
         this.left = p_left;
         this.right = p_right;
+        
+        super.setType(Type.INT);
     } // LessOrEqual()
 
     public void accept(Visitor v){

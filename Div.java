@@ -18,6 +18,7 @@ public class Div extends Exp
     {
         this.left = p_left;
         this.right = p_right;
+        super.setType(Type.INT);
     } // Div()
 
     public void accept(Visitor v){

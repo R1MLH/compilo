@@ -17,6 +17,7 @@ public class Strexp extends Exp
     {
         // initialisation des variables d'instance
         this.aX = pX;
+        super.setType(Type.STR);
     }
     
     public void accept(Visitor v){

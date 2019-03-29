@@ -19,6 +19,7 @@ public class GreaterOrEqual extends Exp
         // initialise instance variables
         this.left = p_left;
         this.right = p_right;
+        super.setType(Type.INT);
     } // Add()
 
     public void accept(Visitor v){

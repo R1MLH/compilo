@@ -18,6 +18,7 @@ public class Positive extends Exp
     {
         // initialise instance variables
         this.e = p_exp;
+        super.setType(Type.INT);
     } // Add()
 
     public void accept(Visitor v){

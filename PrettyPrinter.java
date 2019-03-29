@@ -124,6 +124,6 @@ public class PrettyPrinter implements Visitor
     }
     
     public void visit(Strexp e){
-        
+        this.returnS += "STRING (" + e.getString()+ ")";
     }
 } // PrettyPrinter

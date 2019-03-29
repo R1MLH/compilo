@@ -18,6 +18,7 @@ public class Sub extends Exp
     {
         this.left = p_left;
         this.right = p_right;
+        super.setType(Type.INT);
     } // Sub()
     
     public void accept(Visitor v){

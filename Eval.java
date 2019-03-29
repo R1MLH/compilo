@@ -9,13 +9,19 @@ public class Eval implements Visitor
 {
     private int value;
     private String strValue;
+    private boolean strFlag;
     
     public Eval(){
         this.value = 0;
+        this.strFlag = false;
     }
 
     public int getValue(){
         return this.value;
+    }
+    
+    public String getString(){
+        return this.strValue;
     }
 
     public void visit(Add a){

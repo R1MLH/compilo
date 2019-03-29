@@ -7,6 +7,7 @@
  */
 public abstract class Exp 
 {
+    private Type aType;
     /**
      * Default constructor for objects of class Exp
      */
@@ -26,5 +27,13 @@ public abstract class Exp
         PrettyPrinter p = new PrettyPrinter();
         this.accept(p);
         p.prettyPrint();
+    }
+    
+    public Type getType(){
+        return this.aType;
+    }
+    
+    public void setType(Type pType){
+        this.aType = pType;
     }
 } // Exp

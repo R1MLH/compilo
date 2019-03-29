@@ -15,6 +15,7 @@ public class Int extends Exp
      */
     public Int(int i)
     {
+        super.setType(Type.INT);
         this.value = i;
     } 
     

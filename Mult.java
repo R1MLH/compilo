@@ -17,6 +17,7 @@ public class Mult extends Exp
     {
         this.left = p_left;
         this.right = p_right;
+        super.setType(Type.INT);
     } // Mult()
 
     public void accept(Visitor v){
