@@ -23,6 +23,14 @@ TOKEN:
 |   < DIGIT: ["0"-"9"] >                      // A decimal digit.
 |   < EOL: "\n" >                           // End of line.
 |   < STRING: "\"" (~["\""])*  "\"">
+|   < LET: "let">
+|   < IF: "if">
+|   < THEN: "then">
+|   < ELSE: "else">
+|   < PRINT: "print">
+|   < IN: "in">
+|   < END: "end">
+|   < VAR: "var">
 |   < VARNAME: (["a"-"z"]|["A"-"Z"])+ >
 }
 
@@ -33,7 +41,7 @@ void mainloop():
 {
     (
       a=expression() <EOL> { a.prettyPrint(); }
-      | "print(" a=expression() ")" <EOL> {
+      | <PRINT> "(" a=expression() ")" <EOL> {
                                             TypeChecker t = new TypeChecker();
                                             a.accept(t);
                                             Eval e = new Eval(a.getType());
@@ -54,13 +62,13 @@ void mainloop():
 Declaration decl():
 {Exp a; Token t;}
 {
-  "var" t=<VARNAME> ":=" a=expression() {return new Declaration(t.toString(),a);}
+  <VAR> t=<VARNAME> ":=" a=expression() {return new Declaration(t.toString(),a);}
 }
 Instruction let():
 {Declaration a;Instruction b;}
 {
   {LetInEnd zzz = new LetInEnd();}
-  "let" (a = decl(){zzz.addDecl(a);})* "in" (b=instruction(){zzz.addInstr(b);})* "end" {return zzz;}
+  <LET> (a = decl(){zzz.addDecl(a);})? <IN> (b=instruction(){zzz.addInstr(b);})? <END> {return zzz;}
 
 }
 
@@ -68,7 +76,7 @@ Instruction instruction():
 {Exp e;Token t; Instruction i; }
 {
   e = expression() {return new InstrExp(e);}
-  |"print""(" e = expression()")"{return new Print(e);}
+  |<PRINT>"(" e = expression()")"{return new Print(e);}
   |i =let() {return i;}
 }
 // Expression (the axiom).
@@ -135,7 +143,7 @@ Exp expressionSix():
 { Exp a; Exp b,c,d; }
 {
       a=expressionSeven() {return a;}
-      | "if" "(" b = expression() ")" "then""(" c = expression() ")" "else" "(" d = expression() ")"  {return new IfThenElse(b,c,d);}
+      | <IF> "(" b = expression() ")" <THEN> "(" c = expression() ")" <ELSE> "(" d = expression() ")"  {return new IfThenElse(b,c,d);}
 }
 
 
