@@ -7,15 +7,19 @@
  */
 public class InstrExp extends Instruction
 {
-
-    Exp aE;
-
-    /**
-     * Constructeur d'objets de classe InstrExp
-     */
+    private Exp aE;
+    
     public InstrExp(Exp e)
     {
         this.aE = e;
     }
-
+    
+    public Exp getExp(){
+        return this.aE;
+    }
+    
+    public void accept(Visitor v)
+    {
+        v.visit(this);
+    }
 }

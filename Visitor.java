@@ -28,4 +28,8 @@ public interface Visitor
     public void visit(Strexp a);
     public void visit(Equals a);
     public void visit(Different a);
+    public void visit(InstrExp a);
+    public void visit(LetInEnd a);
+    public void visit(Print a);
+    public void visit(Declaration a);
 } // Visitor

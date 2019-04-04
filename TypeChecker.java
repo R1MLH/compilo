@@ -1,4 +1,5 @@
-
+import java.util.LinkedList;
+import java.util.HashMap;
 /**
  * Décrivez votre classe TypeChecker ici.
  *
@@ -9,6 +10,7 @@ public class TypeChecker implements Visitor
 {
 
     private Type aFoundType;
+    private LinkedList<HashMap<String,Type>> env;
 
     /**
      * Constructeur d'objets de classe TypeChecker
@@ -16,6 +18,9 @@ public class TypeChecker implements Visitor
     public TypeChecker()
     {
         this.aFoundType = null;
+        
+        this.env = new LinkedList<HashMap<String,Type>>();
+        this.env.push(new HashMap<String,Type>());
     }
     
     public Type getType(){
@@ -27,6 +32,7 @@ public class TypeChecker implements Visitor
         Type expectedType = this.aFoundType;
         a.getRight().accept(this);
         if(this.aFoundType != expectedType) throw new RuntimeException("Invalid type");
+        //System.out.println("add ajout du type");
         a.setType(this.aFoundType);
     }
 
@@ -122,5 +128,45 @@ public class TypeChecker implements Visitor
         if(this.aFoundType != expectedType) throw new RuntimeException("Invalid type");
         this.aFoundType = Type.INT;
     }
+    
+    public void visit(InstrExp a)
+    {
+        
+    }
+    
+    public void visit(LetInEnd a)
+    {
+        
+        env.push(new HashMap<String,Type>());
+        for(Declaration d : a.getDecls()){
+            d.accept(this);
+        }
+        for (Instruction i :a.getInstructions()){
+            i.accept(this);
+        }
+        env.pop();
+    
+    }
+    
+    public void visit(Print a)
+    {
+         a.getExp().accept(this);
+         //System.out.println("print typechecké");
+    }
+    
+    public void visit(Declaration a)
+    {
+        a.getExp().accept(this);
+        env.peek().put(a.getName(),this.aFoundType);
+    }
+    
+    public Type variableSearch(String name){
 
+        for(HashMap<String,Type> m :env){
+            if(m.containsKey(name)){
+                return m.get(name);
+            }
+        }
+        throw new RuntimeException("lol c pas possible chef");
+    }
 }

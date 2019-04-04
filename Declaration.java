@@ -15,5 +15,17 @@ public class Declaration
         this.aName = pName;
         this.aExpression = pExpression;
     }
-
+    
+    public void accept(Visitor v){
+        v.visit(this);
+    }
+    
+    public String getName(){
+        return this.aName;
+    }
+    
+    public Exp getExp()
+    {
+        return this.aExpression;
+    }
 }

@@ -37,9 +37,18 @@ TOKEN:
 // Main lopp: read expressions on a line until end of file.
 //     mainloop → (expression <EOL>)* <EOF>
 void mainloop():
-{ Exp a; }
+{ Instruction a; }
 {
-    (
+
+    (a= instruction() <EOL>{
+                      TypeChecker t = new TypeChecker();
+                      a.accept(t);
+                      Eval pp = new Eval();
+                      //PrettyPrinter pp = new PrettyPrinter();
+                      a.accept(pp);
+                      //pp.prettyPrint();
+                    })*
+    /*(
       a=expression() <EOL> { a.prettyPrint(); }
       | <PRINT> "(" a=expression() ")" <EOL> {
                                             TypeChecker t = new TypeChecker();
@@ -55,8 +64,8 @@ void mainloop():
                                                 break;
                                             }
                                           }
-    )*
-    <EOF>
+    )**/
+    //<EOF>
 }
 
 Declaration decl():
@@ -64,11 +73,12 @@ Declaration decl():
 {
   <VAR> t=<VARNAME> ":=" a=expression() {return new Declaration(t.toString(),a);}
 }
+
 Instruction let():
 {Declaration a;Instruction b;}
 {
   {LetInEnd zzz = new LetInEnd();}
-  <LET> (a = decl(){zzz.addDecl(a);})? <IN> (b=instruction(){zzz.addInstr(b);})? <END> {return zzz;}
+  <LET> (a = decl(){zzz.addDecl(a);} <EOL>)* <IN> (b=instruction(){zzz.addInstr(b);} <EOL>)* <END> {return zzz;}
 
 }
 

@@ -104,7 +104,7 @@ public class PrettyPrinter implements Visitor
         a.getRight().accept(this);
         this.returnS +=(")");
     }
-    
+
     public void visit(IfThenElse a){
         this.returnS += ("IF(");
         a.getCondition().accept(this);
@@ -114,7 +114,7 @@ public class PrettyPrinter implements Visitor
         a.getElse().accept(this);
         this.returnS += ")";
     }    
-    
+
     public void visit(Equals a){
         this.returnS +=("Equals(");
         a.getLeft().accept(this);
@@ -122,8 +122,43 @@ public class PrettyPrinter implements Visitor
         a.getRight().accept(this);
         this.returnS +=(")");
     }
-    
+
     public void visit(Strexp e){
         this.returnS += "STRING (" + e.getString()+ ")";
+    }
+
+    public void visit(InstrExp a)
+    {
+        this.returnS += ("InstrExp(");
+        a.getExp().accept(this);
+        this.returnS += (")");
+    }
+
+    public void visit(LetInEnd a)
+    {
+        this.returnS += ("LET(");
+        //a.getCondition().accept(this);
+        for(Declaration e: a.getDecls()){
+            e.accept(this);
+        }
+        this.returnS += (") IN ( ");
+        for(Instruction e: a.getInstructions()){
+            e.accept(this);
+        }
+        this.returnS += (") END ");
+    }
+
+    public void visit(Print a)
+    {
+        this.returnS += ("Print(");
+        a.getExp().accept(this);
+        this.returnS += (")");
+    }
+    
+     public void visit(Declaration a)
+    {
+        this.returnS += ("DECLARATION( " + a.getName() + ":= ");
+        a.getExp().accept(this);
+        this.returnS += (")");
     }
 } // PrettyPrinter

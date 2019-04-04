@@ -1,4 +1,5 @@
-
+import java.util.LinkedList;
+import java.util.HashMap;
 /**
  * Write a description of class Eval here.
  *
@@ -10,12 +11,15 @@ public class Eval implements Visitor
     private int value;
     private String strValue;
     private Type returnType;
+    private LinkedList<HashMap<String,Exp>> env;
 
     public Eval(Type t){
         this.value = 0;
         this.returnType = t;
+        this.env = new LinkedList<HashMap<String,Exp>>();
+        this.env.push(new HashMap<String,Exp>());
     }
-    
+
     public Eval(){
         this(Type.INT);
     }
@@ -23,7 +27,6 @@ public class Eval implements Visitor
     public int getValue(){
         return this.value;
     }
-
 
     public String getString(){
         return this.strValue;
@@ -213,5 +216,54 @@ public class Eval implements Visitor
 
     public void visit(Strexp a){
         this.strValue = a.getString();
+    }
+
+    public void visit(InstrExp a)
+    {
+        a.getExp().accept(this);
+    }
+
+    public void visit(LetInEnd a)
+    {
+        env.push(new HashMap<String,Exp>());
+        for(Declaration d : a.getDecls()){
+            d.accept(this);
+        }
+        for (Instruction i :a.getInstructions()){
+            i.accept(this);
+        }
+        env.pop();
+    }
+
+    public void visit(Print a)
+    {
+        //System.out.println("entering print, preapring to evaluate the value");
+        a.getExp().accept(this);
+
+        //System.out.println("eval complete, switch on the type");
+        switch (a.getExp().getType()){
+            case INT:
+
+            //System.out.println("case int");
+            System.out.println(""+this.getValue());
+            break;
+            case STR:
+            System.out.println(this.getString());
+            break;
+        }
+    }
+
+    public void visit(Declaration a){
+        env.peek().put(a.getName(),a.getExp());
+    }
+
+    public Exp variableSearch(String name){
+
+        for(HashMap<String,Exp> m :env){
+            if(m.containsKey(name)){
+                return m.get(name);
+            }
+        }
+        throw new RuntimeException("lol c pas possible chef");
     }
 } // Eval

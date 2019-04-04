@@ -21,4 +21,17 @@ public class LetInEnd extends Instruction
     public void addDecl(Declaration d){decls.add(d);}
     
     public void addInstr(Instruction i){instructs.add(i);}
+    
+    public void accept(Visitor v)
+    {
+        v.visit(this);
+    }
+    
+    public ArrayList<Declaration> getDecls(){
+        return decls;
+    }
+    
+    public ArrayList<Instruction> getInstructions(){
+        return instructs;
+    }
 }

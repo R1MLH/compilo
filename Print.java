@@ -17,6 +17,11 @@ public class Print extends Instruction
     {
         aE = e;
     }
+    
+    public Exp getExp() {return this.aE;}
 
-  
+    public void accept(Visitor v)
+    {
+        v.visit(this);
+    }
 }
