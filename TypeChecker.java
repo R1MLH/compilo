@@ -169,4 +169,11 @@ public class TypeChecker implements Visitor
         }
         throw new RuntimeException("lol c pas possible chef");
     }
+    
+    public void visit(Variable a){
+        
+        this.aFoundType = variableSearch(a.getName());
+        a.setType(this.aFoundType);
+    }
+    
 }

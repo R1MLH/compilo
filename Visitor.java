@@ -32,4 +32,5 @@ public interface Visitor
     public void visit(LetInEnd a);
     public void visit(Print a);
     public void visit(Declaration a);
+    public void visit(Variable a);
 } // Visitor

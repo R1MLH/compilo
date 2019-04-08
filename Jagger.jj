@@ -122,21 +122,37 @@ Exp expressionTwo():
 }
 
 Exp expressionThree():
-{ Exp a,b; }{
+{ Exp a; }{
   a=expressionFour()
-  (
-    "+" b=expressionThree() { return new Add(a,b); }
-  | "-" b=expressionThree() { return new Sub(a,b); }
-  )? { return a; }
+  a=subadd(a){return a;}
+}
+
+Exp subadd(Exp a):
+{Exp b;}
+{
+  "+" b=expressionFour()
+  a = subadd(new Add(a,b)) {return a;}
+  | "-" b= expressionFour()
+  a = subadd(new Sub(a,b)) {return a;}
+  |{return a;}
+
 }
 
 Exp expressionFour():
 { Exp a,b; }{
   a=expressionFive()
-  (
-    "*" b=expressionFour() { return new Mult(a,b); }
-  | "/" b=expressionFour() { return new Div(a,b); }
-  )? { return a; }
+  a=muldiv(a){ return a; }
+}
+
+Exp muldiv(Exp a):
+{Exp b;}
+{
+  "*" b=expressionFour()
+  a = muldiv(new Mult(a,b)) {return a;}
+  | "/" b= expressionFour()
+  a = muldiv(new Div(a,b)) {return a;}
+  |{return a;}
+
 }
 
 Exp expressionFive():

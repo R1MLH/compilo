@@ -161,4 +161,8 @@ public class PrettyPrinter implements Visitor
         a.getExp().accept(this);
         this.returnS += (")");
     }
+    
+    public void visit(Variable a){
+        this.returnS += ("VARIABLE:"+a.getName());
+    }
 } // PrettyPrinter
