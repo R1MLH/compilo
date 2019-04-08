@@ -78,7 +78,7 @@ Instruction let():
 {Declaration a;Instruction b;}
 {
   {LetInEnd zzz = new LetInEnd();}
-  <LET> (a = decl(){zzz.addDecl(a);} <EOL>)* <IN> (b=instruction(){zzz.addInstr(b);} <EOL>)* <END> {return zzz;}
+  <LET> (a = decl(){zzz.addDecl(a);} <EOL>)* <IN> (b=instruction(){zzz.addInstr(b);})? (<EOL> (b=instruction(){zzz.addInstr(b);} <EOL>)*)? <END> {return zzz;}
 
 }
 
@@ -161,7 +161,8 @@ Exp expressionSeven():
 { Token t; Exp e; }
 {
     t=<STRING> { return new Strexp(t.toString().replaceAll("\"",""));}
-    |  t=<NUMBER> { return new Int(Integer.parseInt(t.toString())); }
+    | t=<NUMBER> { return new Int(Integer.parseInt(t.toString())); }
+    | t=<VARNAME>{return new Variable(t.toString());}
     | "(" e=expression() ")" { return e; }
 
 }
