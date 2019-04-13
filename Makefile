@@ -2,7 +2,7 @@ all :
 	java -cp javacc.jar javacc Jagger.jj
 	javac *.java
 
-check :
+check : all
 	echo "tests qui réussissent :"
 	java Jagger < ./tests/pass/testPrint
 	java Jagger < ./tests/pass/testString
