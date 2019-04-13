@@ -15,8 +15,8 @@ check :
 	java Jagger < ./tests/pass/testWhile
 	java Jagger < ./tests/pass/testFor
 	echo "tests qui ratent :"
-	java Jagger < ./tests/fail/failString2
-	java Jagger < ./tests/fail/failString
-	java Jagger < ./tests/fail/failLetInEnd
-	java Jagger < ./tests/fail/failLetInEnd3
-	java Jagger < ./tests/fail/failFor
+	-java Jagger < ./tests/fail/failString2
+	-java Jagger < ./tests/fail/failString
+	-java Jagger < ./tests/fail/failLetInEnd
+	-java Jagger < ./tests/fail/failLetInEnd3
+	-java Jagger < ./tests/fail/failFor

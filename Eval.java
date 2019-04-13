@@ -251,7 +251,8 @@ public class Eval implements Visitor
     }
 
     public void visit(Declaration a){
-      
+        
+        if(env.peek().containsKey(a.getName())) throw new RuntimeException("variable already defined");
         Exp savedExp=null;      
         a.getExp().accept(this);    
         switch(a.getExp().getType()){
@@ -262,7 +263,6 @@ public class Eval implements Visitor
             savedExp = new Strexp(this.strValue);
             break;
         }
-      
         env.peek().put(a.getName(),savedExp);
     }
 
