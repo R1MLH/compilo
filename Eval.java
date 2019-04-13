@@ -158,7 +158,7 @@ public class Eval implements Visitor
             int leftValue = this.value;
             a.getRight().accept(this);
             int rightValue = this.value;
-            if(leftValue >= rightValue) this.value = 1;
+            if(leftValue <= rightValue) this.value = 1;
             else this.value = 0;
             break;
             case STR:
@@ -279,6 +279,17 @@ public class Eval implements Visitor
         throw new RuntimeException("lol c pas possible chef");
     }
     
+    public void updateVar(String name,Exp value){
+
+        for(HashMap<String,Exp> m :env){
+            if(m.containsKey(name)){
+                m.replace(name,value);
+                return;
+            }
+        }
+        throw new RuntimeException("lol c pas possible chef");
+    }
+    
     public void visit(While a){
         a.getCondition().accept(this);
         while(this.value != 0)
@@ -306,6 +317,7 @@ public class Eval implements Visitor
             break;
         }
       
-        env.peek().replace(a.getName(),savedExp);
+        this.updateVar(a.getName(),savedExp);
     }
+    
 } // Eval

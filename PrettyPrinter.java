@@ -157,7 +157,7 @@ public class PrettyPrinter implements Visitor
     
      public void visit(Declaration a)
     {
-        this.returnS += ("DECLARATION( " + a.getName() + ":= ");
+        this.returnS += ("DECLARATION( " + a.getName() + " := ");
         a.getExp().accept(this);
         this.returnS += (")");
     }
@@ -168,6 +168,7 @@ public class PrettyPrinter implements Visitor
         this.returnS += ("){");
         for(Instruction e: a.getInstructions()){
             e.accept(this);
+            this.returnS+=(";");
         }
         this.returnS += ("}");
     }
@@ -177,7 +178,7 @@ public class PrettyPrinter implements Visitor
     
       public void visit(Affectation a)
     {
-        this.returnS += ("Affectation( " + a.getName() + ":= ");
+        this.returnS += ("Affectation( " + a.getName() + " :=  ");
         a.getExp().accept(this);
         this.returnS += (")");
     }

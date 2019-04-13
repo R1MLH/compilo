@@ -47,12 +47,13 @@ void mainloop():
 {
 
     (a= instruction() <EOL>{
-                      TypeChecker t = new TypeChecker();
-                      a.accept(t);
-                      Eval e = new Eval();
+
                       PrettyPrinter pp = new PrettyPrinter();
                       a.accept(pp);
                       pp.prettyPrint();
+                      TypeChecker t = new TypeChecker();
+                      a.accept(t);
+                      Eval e = new Eval();
                       a.accept(e);
                     })*
 
@@ -61,13 +62,13 @@ void mainloop():
 Declaration decl():
 {Exp a; Token t;}
 {
-  <VAR> t=<AFFECT> a=expression() {return new Declaration(t.toString().replaceAll(" :=",""),a);}
+  <VAR> t=<AFFECT> a=expression() {return new Declaration(t.toString().replaceAll(" ","").replaceAll(":","").replaceAll("=",""),a);}
 }
 
 Instruction affectation():
 {Token t; Exp a;}
 {
-  t=<AFFECT> a=expression() {return new Affectation(t.toString().replaceAll(" :=",""),a);}
+  t=<AFFECT> a=expression() {return new Affectation(t.toString().replaceAll(" ","").replaceAll(":","").replaceAll("=",""),a);}
 }
 
 Instruction let():
@@ -88,11 +89,11 @@ Instruction forInstr():
 {Exp a,b; Instruction c; Token t;}
 {
 {While zzz = null;LetInEnd lend =new LetInEnd();}
-<FOR> t= <AFFECT> a = expression(){lend.addDecl(new Declaration(t.toString().replaceAll(" :=",""),a));}
- <TO> b = expression() {zzz = new While( new LessOrEqual(new Variable(t.toString().replaceAll(" :=","")),b));}
+<FOR> t= <AFFECT> a = expression(){lend.addDecl(new Declaration(t.toString().replaceAll(" ","").replaceAll(":","").replaceAll("=",""),a));}
+ <TO> b = expression() {zzz = new While( new LessOrEqual(new Variable(t.toString().replaceAll(" ","").replaceAll(":","").replaceAll("=","")),b));}
  <DO>  c=instruction() {
                         zzz.addInstr(c);
-                        zzz.addInstr(new Affectation(t.toString().replaceAll(" :=",""),new Add(new Variable(t.toString().replaceAll(" :=","")),new Int(1))));
+                        zzz.addInstr(new Affectation(t.toString().replaceAll(" ","").replaceAll(":","").replaceAll("=",""),new Add(new Variable(t.toString().replaceAll(" ","").replaceAll(":","").replaceAll("=","")),new Int(1))));
                         lend.addInstr(zzz);
                         return lend;
                        }

@@ -187,6 +187,6 @@ public class TypeChecker implements Visitor
     public void visit(Affectation a)
     {
         a.getExp().accept(this);
-        if(this.aFoundType != env.peek().get(a.getName())) throw new RuntimeException("variable non déclarée");
+        if(this.aFoundType != variableSearch(a.getName())) throw new RuntimeException("variable non déclarée");
     }
 }
