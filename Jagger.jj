@@ -32,6 +32,7 @@ TOKEN:
 |   < END: "end">
 |   < VAR: "var">
 |   < VARNAME: (["a"-"z"]|["A"-"Z"])+ >
+|   < COMA: ",">
 }
 
 // Main lopp: read expressions on a line until end of file.
@@ -77,9 +78,8 @@ Declaration decl():
 Instruction let():
 {Declaration a;Instruction b;}
 {
-  {LetInEnd zzz = new LetInEnd();}
-  <LET> (a = decl(){zzz.addDecl(a);} <EOL>)* <IN> (b=instruction(){zzz.addInstr(b);})? (<EOL> (b=instruction(){zzz.addInstr(b);} <EOL>)*)? <END> {return zzz;}
-
+  {LetInEnd l = new LetInEnd();}
+  <LET> (<EOL>)* ((a=decl(){l.addDecl(a);}) ((<EOL>)+ (a=decl(){l.addDecl(a);} (<EOL>)+)*)?)? <IN> (<EOL>)* (b=instruction(){l.addInstr(b);}) (<COMA>(<EOL>)* b=instruction(){l.addInstr(b);})* (<EOL>)* <END> {return l;}
 }
 
 Instruction instruction():
