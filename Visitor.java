@@ -33,4 +33,5 @@ public interface Visitor
     public void visit(Print a);
     public void visit(Declaration a);
     public void visit(Variable a);
+    public void visit(While a);
 } // Visitor

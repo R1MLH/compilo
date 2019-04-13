@@ -162,6 +162,15 @@ public class PrettyPrinter implements Visitor
         this.returnS += (")");
     }
     
+    public void visit(While a){
+        this.returnS+= ("WHILE(");
+        a.getCondition().accept(this);
+        this.returnS += ("){");
+        for(Instruction e: a.getInstructions()){
+            e.accept(this);
+        }
+        this.returnS += ("}");
+    }
     public void visit(Variable a){
         this.returnS += ("VARIABLE:"+a.getName());
     }

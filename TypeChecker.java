@@ -176,4 +176,11 @@ public class TypeChecker implements Visitor
         a.setType(this.aFoundType);
     }
     
+    public void visit(While a){
+        a.getCondition().accept(this);
+        if(a.getCondition().getType() != Type.INT) throw new RuntimeException("while string lol ta cru");
+        for (Instruction i :a.getInstructions()){
+            i.accept(this);
+        }
+    }
 }

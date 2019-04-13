@@ -279,6 +279,17 @@ public class Eval implements Visitor
         throw new RuntimeException("lol c pas possible chef");
     }
     
+    public void visit(While a){
+        a.getCondition().accept(this);
+        while(this.value != 0)
+        {
+            for (Instruction i :a.getInstructions()){
+                i.accept(this);
+            }
+            a.getCondition().accept(this);
+        }
+    }
+    
     public void visit(Variable a){
         variableSearch(a.getName()).accept(this);
     }

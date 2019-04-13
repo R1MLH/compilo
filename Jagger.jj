@@ -31,6 +31,8 @@ TOKEN:
 |   < IN: "in">
 |   < END: "end">
 |   < VAR: "var">
+|   < WHILE: "while">
+|   < DO: "do">
 |   < VARNAME: (["a"-"z"]|["A"-"Z"])+ >
 }
 
@@ -82,12 +84,23 @@ Instruction let():
 
 }
 
+Instruction whileInstr():
+{Exp a; Instruction b;}
+{{While zzz =null;}
+<WHILE> a = expression(){zzz = new While(a);} <DO> ( b=instruction(){zzz.addInstr(b);}
+                                                    |"{"(b=instruction(){zzz.addInstr(b);}) (","b=instruction(){zzz.addInstr(b);})* "}"
+                                                    )
+{return zzz;}
+}
+
+
 Instruction instruction():
 {Exp e;Token t; Instruction i; }
 {
   e = expression() {return new InstrExp(e);}
   |<PRINT>"(" e = expression()")"{return new Print(e);}
   |i =let() {return i;}
+  |i = whileInstr() {return i;}
 }
 // Expression (the axiom).
 // E -> T ('+'T | '-'T)*

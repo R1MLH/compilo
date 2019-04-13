@@ -7,8 +7,8 @@ import java.util.ArrayList;
  */
 public class LetInEnd extends Instruction
 {
-    ArrayList<Declaration> decls;
-    ArrayList<Instruction> instructs;
+    private ArrayList<Declaration> decls;
+    private ArrayList<Instruction> instructs;
     /**
      * Constructeur d'objets de classe LetInEnd
      */
