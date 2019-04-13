@@ -151,7 +151,6 @@ public class TypeChecker implements Visitor
     public void visit(Print a)
     {
         a.getExp().accept(this);
-        //System.out.println("print typechecké");
     }
 
     public void visit(Declaration a)
@@ -167,7 +166,7 @@ public class TypeChecker implements Visitor
                 return m.get(name);
             }
         }
-        throw new RuntimeException("lol c pas possible chef");
+        throw new RuntimeException("variable not found");
     }
 
     public void visit(Variable a){
@@ -178,7 +177,7 @@ public class TypeChecker implements Visitor
 
     public void visit(While a){
         a.getCondition().accept(this);
-        if(a.getCondition().getType() != Type.INT) throw new RuntimeException("while string lol ta cru");
+        if(a.getCondition().getType() != Type.INT) throw new RuntimeException("String detected in a While Condition");
         for (Instruction i :a.getInstructions()){
             i.accept(this);
         }
@@ -187,6 +186,6 @@ public class TypeChecker implements Visitor
     public void visit(Affectation a)
     {
         a.getExp().accept(this);
-        if(this.aFoundType != variableSearch(a.getName())) throw new RuntimeException("variable non déclarée");
+        if(this.aFoundType != variableSearch(a.getName())) throw new RuntimeException("undeclared variable");
     }
 }

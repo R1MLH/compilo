@@ -237,14 +237,11 @@ public class Eval implements Visitor
 
     public void visit(Print a)
     {
-        //System.out.println("entering print, preapring to evaluate the value");
         a.getExp().accept(this);
 
-        //System.out.println("eval complete, switch on the type");
         switch (a.getExp().getType()){
             case INT:
 
-            //System.out.println("case int");
             System.out.println(""+this.getValue());
             break;
             case STR:
@@ -276,7 +273,7 @@ public class Eval implements Visitor
                 return m.get(name);
             }
         }
-        throw new RuntimeException("lol c pas possible chef");
+        throw new RuntimeException("this should not happen if it was typechecked before");
     }
     
     public void updateVar(String name,Exp value){
@@ -287,7 +284,7 @@ public class Eval implements Visitor
                 return;
             }
         }
-        throw new RuntimeException("lol c pas possible chef");
+        throw new RuntimeException("this should not happen if it was typechecked before");
     }
     
     public void visit(While a){
