@@ -1,0 +1,4 @@
+let var a:=0 
+in
+while (a<5) do {print(a), a:=a+1}
+end

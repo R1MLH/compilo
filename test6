@@ -1,0 +1,7 @@
+let var a:=3
+var b:=2
+var c:=1
+in
+print(a-b-c)
+print(a/b/c)
+end

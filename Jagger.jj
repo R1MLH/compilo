@@ -29,11 +29,13 @@ TOKEN:
 |   < ELSE: "else">
 |   < PRINT: "print">
 |   < IN: "in">
+|   < TO: "to">
 |   < END: "end">
 |   < VAR: "var">
+|   < FOR: "for">
 |   < WHILE: "while">
 |   < DO: "do">
-|   < AFFECT: <VARNAME> ":=">
+|   < AFFECT: <VARNAME> (" ")* ":=">
 |   < VARNAME: (["a"-"z"]|["A"-"Z"])+ >
 |   < COMA: ",">
 }
@@ -47,10 +49,11 @@ void mainloop():
     (a= instruction() <EOL>{
                       TypeChecker t = new TypeChecker();
                       a.accept(t);
-                      Eval pp = new Eval();
-                      //PrettyPrinter pp = new PrettyPrinter();
+                      Eval e = new Eval();
+                      PrettyPrinter pp = new PrettyPrinter();
                       a.accept(pp);
-                      //pp.prettyPrint();
+                      pp.prettyPrint();
+                      a.accept(e);
                     })*
 
 }
@@ -58,13 +61,13 @@ void mainloop():
 Declaration decl():
 {Exp a; Token t;}
 {
-  <VAR> t=<AFFECT> a=expression() {return new Declaration(t.toString().replaceAll(":=",""),a);}
+  <VAR> t=<AFFECT> a=expression() {return new Declaration(t.toString().replaceAll(" :=",""),a);}
 }
 
 Instruction affectation():
 {Token t; Exp a;}
 {
-  t=<AFFECT> a=expression() {return new Affectation(t.toString().replaceAll(":=",""),a);}
+  t=<AFFECT> a=expression() {return new Affectation(t.toString().replaceAll(" :=",""),a);}
 }
 
 Instruction let():
@@ -77,12 +80,23 @@ Instruction let():
 Instruction whileInstr():
 {Exp a; Instruction b;}
 {{While zzz =null;}
-<WHILE> a = expression(){zzz = new While(a);} <DO> ( b=instruction(){zzz.addInstr(b);}
-                                                    |"{"(b=instruction(){zzz.addInstr(b);}) (","b=instruction(){zzz.addInstr(b);})* "}"
-                                                    )
+<WHILE> a = expression(){zzz = new While(a);} <DO> (<EOL>)* "(" (b=instruction(){zzz.addInstr(b);}) ("," b=instruction(){zzz.addInstr(b);})* ")"
 {return zzz;}
 }
 
+Instruction forInstr():
+{Exp a,b; Instruction c; Token t;}
+{
+{While zzz = null;LetInEnd lend =new LetInEnd();}
+<FOR> t= <AFFECT> a = expression(){lend.addDecl(new Declaration(t.toString().replaceAll(" :=",""),a));}
+ <TO> b = expression() {zzz = new While( new LessOrEqual(new Variable(t.toString().replaceAll(" :=","")),b));}
+ <DO>  c=instruction() {
+                        zzz.addInstr(c);
+                        zzz.addInstr(new Affectation(t.toString().replaceAll(" :=",""),new Add(new Variable(t.toString().replaceAll(" :=","")),new Int(1))));
+                        lend.addInstr(zzz);
+                        return lend;
+                       }
+}
 
 Instruction instruction():
 {Exp e;Token t; Instruction i; }
@@ -92,6 +106,7 @@ Instruction instruction():
   |<PRINT>"(" e = expression()")"{return new Print(e);}
   |i =let() {return i;}
   |i = whileInstr() {return i;}
+  |i = forInstr() {return i;}
   |e = expression() {return new InstrExp(e);}
   }
 // Expression (the axiom).
