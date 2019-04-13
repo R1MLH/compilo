@@ -293,4 +293,19 @@ public class Eval implements Visitor
     public void visit(Variable a){
         variableSearch(a.getName()).accept(this);
     }
+    public void visit(Affectation a){
+      
+        Exp savedExp=null;      
+        a.getExp().accept(this);    
+        switch(a.getExp().getType()){
+            case INT:           
+            savedExp = new Int(this.value);
+            break;
+            case STR:           
+            savedExp = new Strexp(this.strValue);
+            break;
+        }
+      
+        env.peek().replace(a.getName(),savedExp);
+    }
 } // Eval

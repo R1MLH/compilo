@@ -33,6 +33,7 @@ TOKEN:
 |   < VAR: "var">
 |   < WHILE: "while">
 |   < DO: "do">
+|   < AFFECT: <VARNAME> ":=">
 |   < VARNAME: (["a"-"z"]|["A"-"Z"])+ >
 |   < COMA: ",">
 }
@@ -51,30 +52,19 @@ void mainloop():
                       a.accept(pp);
                       //pp.prettyPrint();
                     })*
-    /*(
-      a=expression() <EOL> { a.prettyPrint(); }
-      | <PRINT> "(" a=expression() ")" <EOL> {
-                                            TypeChecker t = new TypeChecker();
-                                            a.accept(t);
-                                            Eval e = new Eval(a.getType());
-                                            a.accept(e);
-                                            switch (a.getType()){
-                                              case INT:
-                                                System.out.println(""+e.getValue());
-                                                break;
-                                              case STR:
-                                                System.out.println(e.getString());
-                                                break;
-                                            }
-                                          }
-    )**/
-    //<EOF>
+
 }
 
 Declaration decl():
 {Exp a; Token t;}
 {
-  <VAR> t=<VARNAME> ":=" a=expression() {return new Declaration(t.toString(),a);}
+  <VAR> t=<AFFECT> a=expression() {return new Declaration(t.toString().replaceAll(":=",""),a);}
+}
+
+Instruction affectation():
+{Token t; Exp a;}
+{
+  t=<AFFECT> a=expression() {return new Affectation(t.toString().replaceAll(":=",""),a);}
 }
 
 Instruction let():
@@ -97,11 +87,13 @@ Instruction whileInstr():
 Instruction instruction():
 {Exp e;Token t; Instruction i; }
 {
-  e = expression() {return new InstrExp(e);}
+
+  i = affectation(){return i;}
   |<PRINT>"(" e = expression()")"{return new Print(e);}
   |i =let() {return i;}
   |i = whileInstr() {return i;}
-}
+  |e = expression() {return new InstrExp(e);}
+  }
 // Expression (the axiom).
 // E -> T ('+'T | '-'T)*
 Exp expression():

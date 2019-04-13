@@ -18,11 +18,11 @@ public class TypeChecker implements Visitor
     public TypeChecker()
     {
         this.aFoundType = null;
-        
+
         this.env = new LinkedList<HashMap<String,Type>>();
         this.env.push(new HashMap<String,Type>());
     }
-    
+
     public Type getType(){
         return this.aFoundType;
     }
@@ -128,15 +128,15 @@ public class TypeChecker implements Visitor
         if(this.aFoundType != expectedType) throw new RuntimeException("Invalid type");
         this.aFoundType = Type.INT;
     }
-    
+
     public void visit(InstrExp a)
     {
-        
+
     }
-    
+
     public void visit(LetInEnd a)
     {
-        
+
         env.push(new HashMap<String,Type>());
         for(Declaration d : a.getDecls()){
             d.accept(this);
@@ -145,21 +145,21 @@ public class TypeChecker implements Visitor
             i.accept(this);
         }
         env.pop();
-    
+
     }
-    
+
     public void visit(Print a)
     {
-         a.getExp().accept(this);
-         //System.out.println("print typechecké");
+        a.getExp().accept(this);
+        //System.out.println("print typechecké");
     }
-    
+
     public void visit(Declaration a)
     {
         a.getExp().accept(this);
         env.peek().put(a.getName(),this.aFoundType);
     }
-    
+
     public Type variableSearch(String name){
 
         for(HashMap<String,Type> m :env){
@@ -169,18 +169,24 @@ public class TypeChecker implements Visitor
         }
         throw new RuntimeException("lol c pas possible chef");
     }
-    
+
     public void visit(Variable a){
-        
+
         this.aFoundType = variableSearch(a.getName());
         a.setType(this.aFoundType);
     }
-    
+
     public void visit(While a){
         a.getCondition().accept(this);
         if(a.getCondition().getType() != Type.INT) throw new RuntimeException("while string lol ta cru");
         for (Instruction i :a.getInstructions()){
             i.accept(this);
         }
+    }
+
+    public void visit(Affectation a)
+    {
+        a.getExp().accept(this);
+        if(this.aFoundType != env.peek().get(a.getName())) throw new RuntimeException("variable non déclarée");
     }
 }

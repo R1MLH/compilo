@@ -174,4 +174,11 @@ public class PrettyPrinter implements Visitor
     public void visit(Variable a){
         this.returnS += ("VARIABLE:"+a.getName());
     }
+    
+      public void visit(Affectation a)
+    {
+        this.returnS += ("Affectation( " + a.getName() + ":= ");
+        a.getExp().accept(this);
+        this.returnS += (")");
+    }
 } // PrettyPrinter
