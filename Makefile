@@ -4,19 +4,19 @@ all :
 
 check :
 	echo "tests qui réussissent :"
-	java Jagger < ./pass/testPrint
-	java Jagger < ./pass/testString
-	java Jagger < ./pass/testIfThenElse
-	java Jagger < ./pass/testIfThenElse2
-	java Jagger < ./pass/testLetInEnd
-	java Jagger < ./pass/testLetInEnd1
-	java Jagger < ./pass/testLetInEnd2
-	java Jagger < ./pass/testLetInEnd3
-	java Jagger < ./pass/testWhile
-	java Jagger < ./pass/testFor
+	java Jagger < ./tests/pass/testPrint
+	java Jagger < ./tests/pass/testString
+	java Jagger < ./tests/pass/testIfThenElse
+	java Jagger < ./tests/pass/testIfThenElse2
+	java Jagger < ./tests/pass/testLetInEnd
+	java Jagger < ./tests/pass/testLetInEnd1
+	java Jagger < ./tests/pass/testLetInEnd2
+	java Jagger < ./tests/pass/testLetInEnd3
+	java Jagger < ./tests/pass/testWhile
+	java Jagger < ./tests/pass/testFor
 	echo "tests qui ratent :"
-	java Jagger < ./fail/failString
-	java Jagger < ./fail/failString2
-	java Jagger < ./fail/failLetInEnd
-	java Jagger < ./fail/failLetInEnd3
-	java Jagger < ./fail/failFor
+	java Jagger < ./tests/fail/failString2
+	java Jagger < ./tests/fail/failString
+	java Jagger < ./tests/fail/failLetInEnd
+	java Jagger < ./tests/fail/failLetInEnd3
+	java Jagger < ./tests/fail/failFor
